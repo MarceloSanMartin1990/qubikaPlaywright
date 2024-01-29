@@ -26,7 +26,7 @@ test("Challenge 2", async () => {
       signUpRequest
     );
 
-  // Log the response from the API
+    // Log the response from the API
     console.log("API Response:", response.data);
   } catch (error) {
     console.error("Error registering a new user:", error);
@@ -71,29 +71,23 @@ test("Challenge 2", async () => {
   // Loop through pages until the element is found
   while (!found) {
     // Check if the target element is present on the current page
-    const isElementPresent = await page.evaluate((text) => {
-      const elements = Array.from(document.querySelectorAll(text));
-      return elements.some((element) => element.textContent.includes(text));
-    }, categoryPage.bodyTable);
+    const isElementPresent = await page.evaluate(
+      ({ textToType, bodyTable }) => {
+        const elements = Array.from(document.querySelectorAll(bodyTable));
+        return elements.some((element) =>
+          element.textContent.includes(textToType)
+        );
+      },
+      { textToType, bodyTable: categoryPage.bodyTable }
+    );
+    console.log(isElementPresent);
 
     if (isElementPresent) {
       console.log("Element found on the current page!");
       found = true;
     } else {
       // Click the "Next Page" button
-      // Locate the next button element, then scroll into view
-      const nextButton = await page.$(categoryPage.nextButton);
-
-      if (nextButton) {
-        // Scroll into view
-        await nextButton.scrollIntoView();
-
-        // Click the next button
-        await nextButton.click();
-      } else {
-        console.log("Next page button not found. Exiting loop.");
-        break; // Break out of the loop if the "Next Page" button is not found
-      }
+      await page.click(categoryPage.nextButtonPartial);
     }
   }
 
@@ -107,32 +101,27 @@ test("Challenge 2", async () => {
   await page.click(`${optionToSelect}:has-text('The great category 22')`);
   await page.click(categoryPage.submitButton);
 
+  let subFound = false;
   // Loop through pages until the element is found
-  while (!found) {
+  while (!subFound) {
     // Check if the target element is present on the current page
-    const isElementPresent = await page.evaluate((text) => {
-      const elements = Array.from(document.querySelectorAll(text));
-      return elements.some((element) => element.textContent.includes(text));
-    }, categoryPage.bodyTable);
+    const isElementPresent = await page.evaluate(
+      ({ textToType, bodyTable }) => {
+        const elements = Array.from(document.querySelectorAll(bodyTable));
+        return elements.some((element) =>
+          element.textContent.includes(textToType)
+        );
+      },
+      { textToType, bodyTable: categoryPage.bodyTable }
+    );
+    console.log(isElementPresent);
 
     if (isElementPresent) {
       console.log("Element found on the current page!");
-      found = true;
+      subFound = true;
     } else {
       // Click the "Next Page" button
-      // Locate the next button element, then scroll into view
-      const nextButton = await page.$(categoryPage.nextButton);
-
-      if (nextButton) {
-        // Scroll into view
-        await nextButton.scrollIntoView();
-
-        // Click the next button
-        await nextButton.click();
-      } else {
-        console.log("Next page button not found. Exiting loop.");
-        break; // Break out of the loop if the "Next Page" button is not found
-      }
+      await page.click(categoryPage.nextButtonPartial);
     }
   }
 

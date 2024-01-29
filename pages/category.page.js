@@ -7,7 +7,7 @@ export class CategoryPage {
       this.bodyTable = "tbody";
       // I need to dig in a bit to see if I can refine more the next button selector
       // the one that I got so far is awful, i havent seen locators like this in a long time.
-      this.nextButton = "li.page-item > a > i:nth-child(2)";
+      this.nextButtonPartial = "li:last-child > a.page-link > span";
       this.dropdownContainer = "div.ng-select-container";
       this.optionToSelect = "div.ng-option";
       this.checkBox = 'div>label:nth-child(2)';
